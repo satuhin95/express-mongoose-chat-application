@@ -1,4 +1,3 @@
-
 // external import 
 const express = require('express');
 const dotenv = require('dotenv');
@@ -6,11 +5,12 @@ const mongoose = require('mongoose');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 
+
 // internal import 
 const loginRouter = require('./routers/loginRouter')
 const usersRouter = require('./routers/usersRouter')
 const inboxRouter = require('./routers/inboxRouter')
-const {errorHandler,notFoundhandler} = require('./middleware/common/errorHandler')
+const {errorHandler,notFoundHandler} = require('./middleware/common/errorHandler')
 
 const app = express();
 dotenv.config();
@@ -23,13 +23,18 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING)
 // request parser 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-
-
-// set view engine
-app.set('view engin', 'ejs');
-
 // set static folder
-app.use(express.static(path.join(__dirname,'public')));
+
+app.use(express.static(path.join(__dirname, "public")));
+app.set('views', path.join(__dirname, 'views'));
+
+
+// set view engineS
+// app.set('view engin', 'ejs');ss
+// app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'ejs');
+
+
 
 //parse cookies
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -43,7 +48,7 @@ app.use('/inbox',inboxRouter);
 
 
 // 404 not found handler 
-app.use(notFoundhandler);
+app.use(notFoundHandler);
 
 // common error handler 
 app.use(errorHandler);
